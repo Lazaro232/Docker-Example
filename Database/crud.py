@@ -1,13 +1,25 @@
+import os
+
 from psycopg2 import connect
+from dotenv import load_dotenv, find_dotenv
 
 
-class DatabaseCrud():
-    def __init__(self, database_info: tuple) -> None:
+class DatabaseConnection():
+    def __init__(self) -> None:
         # Database informations
-        self.host, self.port, self.database, \
-            self.username, self.password = database_info
-        # Connection timeout
-        self.timeout = 40
+        load_dotenv(find_dotenv('Database/database.env'))
+        self.host = os.environ.get('host')
+        self.port = os.environ.get('port')
+        self.database = os.environ.get('database')
+        self.username = os.environ.get('db_username')
+        self.password = os.environ.get('password')
+
+
+class DatabaseCrud(DatabaseConnection):
+    def __init__(self) -> None:
+        super().__init__()
+        # Create table if not exists
+        self.create_table()
 
     def start_connection(self) -> connect:
         conn = connect(host=self.host, port=self.port,
@@ -15,7 +27,22 @@ class DatabaseCrud():
                        password=self.password)
         return conn
 
-    def insert_user(self, name: str, age: int) -> connect:
+    def create_table(self) -> None:
+        # Starting connection
+        connection = self.start_connection()
+        cursor = connection.cursor()
+        # Query
+        query = """CREATE TABLE IF NOT EXISTS users(
+                        id SERIAL NOT NULL,
+                        name TEXT NOT NULL,
+                        age INTEGER NOT NULL);"""
+        # Executing query
+        cursor.execute(query)
+        # Commiting and closing connection
+        connection.commit()
+        connection.close()
+
+    def create_user(self, name: str, age: int) -> None:
         # Starting connection
         connection = self.start_connection()
         cursor = connection.cursor()
@@ -28,12 +55,45 @@ class DatabaseCrud():
         connection.commit()
         connection.close()
 
+    def fetch_user_by_id(self, user_id: int) -> tuple:
+        # Starting connection
+        connection = self.start_connection()
+        cursor = connection.cursor()
+        # Query
+        query = f"""SELECT * FROM users
+                    WHERE id = {user_id};"""
+        # Executing query
+        cursor.execute(query)
+        # Fetching user
+        user_info = cursor.fetchone()
+        # Closing connection
+        connection.close()
 
-'''
-Query to create table
+        return user_info
 
-CREATE TABLE users(
-    id SERIAL NOT NULL,
-    name TEXT NOT NULL,
-    age INTEGER NOT NULL);
-'''
+    def update_user(self, user_id: int, new_name: str, new_age: int) -> None:
+        # Starting connection
+        connection = self.start_connection()
+        cursor = connection.cursor()
+        # Query
+        query = f"""UPDATE users
+                        SET name = '{new_name}', age = {new_age}
+                    WHERE id = {user_id};"""
+        # Executing query
+        cursor.execute(query)
+        # Commiting and closing connection
+        connection.commit()
+        connection.close()
+
+    def delete_user(self, user_id: int) -> None:
+        # Starting connection
+        connection = self.start_connection()
+        cursor = connection.cursor()
+        # Query
+        query = f"""DELETE FROM users
+                    WHERE id = {user_id};"""
+        # Executing query
+        cursor.execute(query)
+        # Commiting and closing connection
+        connection.commit()
+        connection.close()
