@@ -47,7 +47,7 @@ def update_user(user_id: int) -> str:
     # Updating user
     database.update_user(user_id, user_new_name, user_new_age)
 
-    return f'Name and age of user with {user_id} updated to "{user_new_name}" and {user_new_age}'
+    return f'Name and age of user with ID {user_id} updated to "{user_new_name}" and {user_new_age}'
 
 
 @app.route('/user/delete/<int:user_id>')
@@ -63,7 +63,7 @@ def delete_user(user_id: int) -> str:
     # Deleting user
     database.delete_user(user_id)
 
-    return f'User {user_id} deleted!'
+    return f'User with ID {user_id} deleted!'
 
 
 if __name__ == '__main__':
