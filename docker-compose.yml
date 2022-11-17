@@ -1,11 +1,14 @@
 version: '3.7'
 
 services:
+  # Database service
   database:
+    # Image to be built
     image: postgres
     ports:
       - ${DB_PORT}:5432
     restart: always
+    # Enviroment variables
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
@@ -15,8 +18,10 @@ services:
       - pgdata:/var/lib/postgresql/data
     
   api:
+    # Build using the Dockerfile
     build: .
     restart: always
+    # Waits for the database image to be built before starts to build
     depends_on:
       - database
     ports:
@@ -24,6 +29,6 @@ services:
     container_name: flask-api
     volumes:
       - .:/app
-
+# Creates (if no exists) the local volume to persist the data
 volumes:
   pgdata:
