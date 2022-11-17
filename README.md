@@ -17,7 +17,9 @@ The API will have 4 endpoints. One for each *CRUD* operation.
 
 * **/user/create**
     - This endpoint iserts a user into the database. It expects a body containing the name and the age in a JSON format.
-    
+        
+        The body
+
            {"name": "User 1", "age": 18} 
         The answer
 
@@ -26,13 +28,18 @@ The API will have 4 endpoints. One for each *CRUD* operation.
 * **/user/*<user_id>***
     - This endpoint retrieves a user's information. It expects the user's ID in the query string parameters.
 
+        The query
+
            /user/1
+        
         The answer
            
            {"name": "User 1", "age": 18} 
 
 * **/user/update/*<user_id>***
     - This endpoint updates a user's information. It expects the user's ID in the query string parameters and the name and age in the body.
+
+        The query
 
            /user/update/1
         The body
@@ -44,6 +51,8 @@ The API will have 4 endpoints. One for each *CRUD* operation.
 
 * **/user/delete/*<user_id>***
     - This endpoint deletes a user's information. It expects the user's ID in the query string parameters.
+        
+        The query
 
            /user/delete/1
 
