@@ -1,6 +1,6 @@
 from Database.crud import DatabaseCrud
-
 from flask import Flask, request, Response
+
 # Database object
 database = DatabaseCrud()
 # Flask object
@@ -67,4 +67,4 @@ def delete_user(user_id: int) -> str:
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
