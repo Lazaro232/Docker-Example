@@ -16,7 +16,8 @@ services:
     container_name: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
-    
+
+  # Flask API service  
   api:
     # Build using the Dockerfile
     build: .
