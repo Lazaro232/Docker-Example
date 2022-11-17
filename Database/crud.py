@@ -1,18 +1,19 @@
 import os
 
 from psycopg2 import connect
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 
 
 class DatabaseConnection():
     def __init__(self) -> None:
         # Database informations
-        load_dotenv(find_dotenv('Database/database.env'))
-        self.host = os.environ.get('host')
-        self.port = os.environ.get('port')
-        self.database = os.environ.get('database')
-        self.username = os.environ.get('db_username')
-        self.password = os.environ.get('password')
+        load_dotenv()
+        # load_dotenv(find_dotenv('Database/database.env'))
+        self.host = os.environ.get('DB_HOST')
+        self.port = os.environ.get('DB_PORT')
+        self.database = os.environ.get('DB_NAME')
+        self.username = os.environ.get('DB_USER')
+        self.password = os.environ.get('DB_PASSWORD')
 
 
 class DatabaseCrud(DatabaseConnection):
